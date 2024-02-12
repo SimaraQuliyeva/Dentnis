@@ -1,0 +1,81 @@
+@extends('layouts.admin')
+
+@section('header')
+    @include('admin.partials.header')
+@endsection
+
+@section('content')
+    <div class="container-fluid py-4">
+        <main class="app-content">
+            <div class="app-title">
+                <div>
+                    <h1><i class="bi bi-table"></i> Basic Tables</h1>
+                    <p>Basic bootstrap tables</p>
+                </div>
+                <ul class="app-breadcrumb breadcrumb">
+                    <li class="breadcrumb-item"><i class="bi bi-house-door fs-6"></i></li>
+                    <li class="breadcrumb-item">Tables</li>
+                    <li class="breadcrumb-item active"><a href="#">Simple Tables</a></li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="clearfix"></div>
+
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Responsive Table</h3>
+                        @if(session('success'))
+                            <div class="alert alert-success mt-3">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        @if(session('error'))
+                            <div class="alert alert-danger mt-3">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        <div class="text-end" style="margin-top: 10px;">
+                            <button class="btn btn-primary" style="background-color: #00695C; font-size: 18px;">
+                                <a style="color: #fffbe3; text-decoration: none;" href="{{route('admin.youtube.create')}}">+ Add</a>
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Url</th>
+                                    <th>Created at</th>
+                                    <th>Updated at</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($youtubes as $youtube)
+                                    <tr>
+                                        <td>{{ $youtube->id }}</td>
+                                        <td>{{ $youtube->url }}</td>
+                                        <td>{{ $youtube->created_at}}</td>
+                                        <td>{{ $youtube->updated_at}}</td>
+
+                                        <td>
+                                            <a href="{{ route('admin.youtube.edit', ['youtube' => $youtube->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                            <form action="{{ route('admin.youtube.destroy', ['youtube' => $youtube->id]) }}" method="post" style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this youtube link?')">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                            {{--                            {{ $users->appends(request()->all())->links('pagination::bootstrap-5') }}--}}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+@endsection
+
